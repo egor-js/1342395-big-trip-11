@@ -1,7 +1,7 @@
 # Личный проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Egor Radaev](https://up.htmlacademy.ru/ecmascript/11/user/1342395).
-* Наставник: `Неизвестно`.
+* Наставник: [Александр Гулевских](https://htmlacademy.ru/profile/id1025921).
 
 ---
 
