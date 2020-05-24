@@ -136,6 +136,7 @@ const destinanion = [
 // ],
 // "type": `bus`;
 
+
 const tripPointsMocks = [];
 const tempRandomOffers = [];
 
