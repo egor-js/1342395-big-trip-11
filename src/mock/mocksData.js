@@ -156,4 +156,4 @@ const createTripPoints = function () {
   }
 };
 // typeTripPoint, tripCitys, descriptionTripPoint, offersByPointType,
-export { createTripPoints, tripPointsMocks, tempRandomOffers};
+export {createTripPoints, tripPointsMocks, tempRandomOffers};
