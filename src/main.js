@@ -18,6 +18,10 @@ import {createFirstEventTemplate} from "../src/components/createFirstEventTempla
 import {ctreateStatTemplate} from "../src/components/ctreateStatTemplate.js";
 import {createSortTemplate} from "../src/components/createSortTemplate.js";
 import {createTripinfoTemplate} from "../src/components/createTripinfoTemplate.js";
+import {utils} from "../src/utils.js";
+import {typeTripPoint, tripCitys, descriptionTripPoint} from "../src/mock/mocksData.js";
+
+console.log(descriptionTripPoint[utils.randomInt(0, 10)]);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
