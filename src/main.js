@@ -78,7 +78,7 @@ render(siteEventsHeader, createWrapTripDays(), `beforeend`);
 
 const siteHeaderTripDay = document.querySelector(`.trip-days`);
 
-// render(siteHeaderTripDay, createTripDay(), `beforeend`);
+render(siteHeaderTripDay, createTripDay(), `beforeend`);
 
 render(siteEventsHeader, createEventTemplate(), `beforeend`);
 // render(siteEventsHeader, createNewEventWithDestination(), `beforeend`);
