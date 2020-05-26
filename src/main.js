@@ -13,8 +13,16 @@ import {createFirstEventTemplate} from "../src/components/createFirstEventTempla
 import {ctreateStatTemplate} from "../src/components/ctreateStatTemplate.js";
 import {createSortTemplate} from "../src/components/createSortTemplate.js";
 import {createTripinfoTemplate} from "../src/components/createTripinfoTemplate.js";
-// import {utils} from "../src/utils.js";
+import {utils} from "../src/utils.js";
 import {createTripPoints, tripPointsMocks, tempRandomOffers} from "../src/mock/mocksData.js";
+import {API} from "../src/api.js";
+
+const tocken = `Basic 3u3udjnbccec333`;
+const response = new API(tocken);
+
+
+
+// console.log(response.getOffers());
 
 const offer = {
   "type": `taxi`,
@@ -53,7 +61,9 @@ createTripPoints();
 // console.log(`Destination is`, typeof destinanion, `:\n`, destinanion, `\n`);
 // console.log(`Offer is`, typeof offer, `:\n `, offer, `\n`);
 // console.log(`Point is`, typeof point, `:\n `, point, `\n`);
-console.log(`tripPointsMocks is`, typeof tripPointsMocks, `:\n `, tripPointsMocks, `\n`);
+// console.log(`tripPointsMocks is`, typeof tripPointsMocks, `:\n `, tripPointsMocks, `\n`);
+// console.log(userPictures);
+
 
 // console.log(tempRandomOffers);
 
@@ -68,7 +78,9 @@ render(siteHeaderElement, createTripinfoTemplate(), `afterbegin`);
 
 render(siteHeaderElement, createControlsTemplate(), `beforeend`);
 
-render(siteHeaderElement, createFilterTemplate(), `beforeend`);
+
+const filters = [`everything`, `future`, `past`];
+render(siteHeaderElement, createFilterTemplate(filters), `beforeend`);
 
 const siteEventsHeader = document.querySelector(`.trip-events`);
 
