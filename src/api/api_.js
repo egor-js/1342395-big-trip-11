@@ -1,3 +1,6 @@
+
+import {getOffersByEventType, createEventsTemplate} from "./components/event.js";
+
 const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -18,7 +21,7 @@ const API = class {
     return fetch(`https://11.ecmascript.pages.academy/big-trip/points`, {headers})
       .then(checkStatus)
       .then((response) => response.json());
-    // .then(Task.parseTasks);
+    // .then((events) => createEventsTemplate(events));
   }
   getDestinations() {
     const headers = new Headers();
@@ -35,6 +38,7 @@ const API = class {
     return fetch(`https://11.ecmascript.pages.academy/big-trip/offers`, {headers})
       .then(checkStatus)
       .then((response) => response.json());
+    // .then((offers) => getOffersByEventType(offers));
   }
 //   updateTask(id, data) {
 //     const headers = new Headers();
