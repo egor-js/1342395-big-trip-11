@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-// import {formatTime, formatDate} from "../utils/common.js";
+import {formatTime, formatDate, durationTime, isOneDay} from "../utils/common.js";
 // import {isOverdueDate} from "../utils/common.js";
 import {encode} from "he";
 
@@ -103,12 +103,12 @@ export default class Point extends AbstractComponent {
 const createWrapTrip = () => {
   return (
     `
-    <form class="trip-points__trip-sort  trip-sort" action="#" method="get">
+    <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
       <span class="trip-sort__item  trip-sort__item--day">Day</span>
 
-      <div class="trip-sort__item  trip-sort__item--point">
-        <input id="sort-point" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-point" checked>
-        <label class="trip-sort__btn" for="sort-point">point</label>
+      <div class="trip-sort__item  trip-sort__item--event">
+        <input id="sort-event" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-event" checked>
+        <label class="trip-sort__btn" for="sort-event">Event</label>
       </div>
 
       <div class="trip-sort__item  trip-sort__item--time">
@@ -152,6 +152,26 @@ const createWrapTrip = () => {
 
 
 const createPointMarkup = (point) => {
+
+  const date = formatDate(point.date_from);
+  const timeFrom = formatTime(point.date_from);
+  const timeTo = formatTime(point.date_to);
+  const from = durationTime(point.date_from);
+  const to = durationTime(point.date_to);
+  const duration = isOneDay(point.date_to, point.date_from);
+  const offersPrice = point.offers.reduce((acc, offer) => {
+    return acc + offer.price;
+  }, point.base_price);
+  const offers = point.offers.map((offer) => (
+    `
+    <li class="event__offer">
+      <span class="event__offer-title">${offer.title}</span>
+      &plus;
+      &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
+     </li>
+     `)
+  ).join(`\n`);
+
   return (
     `
     <li class="trip-events__item">
@@ -159,28 +179,25 @@ const createPointMarkup = (point) => {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${point.type}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${point.type} to to ${point.destination.name}</h3>
+        <h3 class="event__title">${point.type} to ${point.destination.name} ${point.base_price}</h3>
 
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
+            <time class="event__start-time" datetime="2019-03-18T10:30">${timeFrom}</time>
             &mdash;
-            <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
+            <time class="event__end-time" datetime="2019-03-18T11:00">${timeTo}</time>
           </p>
-          <p class="event__duration">30M</p>
+          <p class="event__duration">${point.date_from}</p>
+          <p class="event__duration">${point.date_to}</p>
         </div>
 
         <p class="event__price">
-          &euro;&nbsp;<span class="event__price-value">20</span>
+          &euro;&nbsp;<span class="event__price-value">${offersPrice}</span>
         </p>
 
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          <li class="event__offer">
-            <span class="event__offer-title">Order Uber</span>
-            &plus;
-            &euro;&nbsp;<span class="event__offer-price">20</span>
-           </li>
+          ${offers}
         </ul>
 
         <button class="event__rollup-btn" type="button">

@@ -15,6 +15,7 @@
     "eslint-config-htmlacademy": "0.5.2",
     "he": "1.2.0",
     "moment": "2.26.0",
+    "moment-timezone": "0.5.31",
     "nanoid": "3.1.9",
     "webpack": "4.43.0",
     "webpack-cli": "3.3.11",

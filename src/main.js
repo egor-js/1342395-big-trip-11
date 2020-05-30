@@ -27,59 +27,6 @@ const store = new Store(STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store);
 const pointModel = new PointModel();
 
-// const tasksModel = new P();
-// apiWithProvider.getPoints();
-
-// const response = new API(TOCKEN);
-
-// console.log(response.getPoints());
-
-const offer = {
-  "type": `taxi`,
-  "offers": [
-    {
-      "title": `Upgrade to a business class`,
-      "price": 120
-    }, {
-      "title": `Choose the radio station`,
-      "price": 60
-    }
-  ]
-};
-
-const point = {
-  "base_price": 1100,
-  "date_from": `2019-07-10T22:55:56.845Z`,
-  "date_to": `2019-07-11T11:22:13.375Z`,
-//  "destination": destinanion,
-  "id": `0`,
-  "is_favorite": false,
-  "offers": [
-    {
-      "title": `Choose meal`,
-      "price": 180
-    }, {
-      "title": `Upgrade to comfort class`,
-      "price": 50
-    }
-  ],
-  "type": `bus`
-};
-
-// createTripPoints();
-
-// console.log(`Destination is`, typeof destinanion, `:\n`, destinanion, `\n`);
-// console.log(`Offer is`, typeof offer, `:\n `, offer, `\n`);
-// console.log(`Point is`, typeof point, `:\n `, point, `\n`);
-// console.log(`tripPointsMocks is`, typeof tripPointsMocks, `:\n `, tripPointsMocks, `\n`);
-// console.log(userPictures);
-
-const eventPoint = {
-
-};
-
-// console.log(tempRandomOffers);
-
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
