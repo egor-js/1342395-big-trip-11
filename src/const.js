@@ -26,10 +26,8 @@ export const MONTH_NAMES = [
 ];
 
 export const FilterType = {
-  ALL: `all`,
-  ARCHIVE: `archive`,
+  ALL: `everything`,
+  FUTURE: `future`,
+  PAST: `past`,
   FAVORITES: `favorites`,
-  OVERDUE: `overdue`,
-  REPEATING: `repeating`,
-  TODAY: `today`,
 };

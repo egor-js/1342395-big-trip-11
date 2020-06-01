@@ -1,4 +1,4 @@
-import {isRepeating, isOneDay, isOverdueDate} from "./common.js";
+import {isOneDay, isOverdueDate} from "./common.js";
 import {FilterType} from "../const.js";
 
 export const getFavoriteTasks = (points) => {

@@ -1,4 +1,4 @@
-// import Point from "../src/models/point.js";
+import Point from "../models/point.js";
 // import Offers from "../src/models/offers.js";
 // import Destinations from "../src/models/Destinations.js";
 
@@ -25,7 +25,7 @@ const API = class {
   }
 
   getOffers() {
-    return this._load({url: `Offers`})
+    return this._load({url: `offers`})
       .then((response) => response.json()); // !!!!!!!!!!!!!!!!
     // .then(Task.parseTasks);
   }
@@ -38,15 +38,15 @@ const API = class {
 
   getPoints() {
     return this._load({url: `points`})
-      .then((response) => response.json()); // !!!!!!!!!!!!!!!!
-    // .then(Task.parseTasks);
+      .then((response) => response.json()) // !!!!!!!!!!!!!!!!
+      .then(Point.parsePoints);
   }
 
-  createTask(task) {
+  createPoint(point) {
     return this._load({
-      url: `tasks`,
+      url: `points`,
       method: Method.POST,
-      body: JSON.stringify(task.toRAW()),
+      body: JSON.stringify(point.toRAW()),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then((response) => response.json()); // !!!!!!!!!!!!!!!!

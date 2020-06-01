@@ -18,58 +18,116 @@ const createButtonMarkup = (name, isActive = true) => {
 // Функцию для генерации HTML-разметки можно превратить в метод класса,
 // однако делать мы этого не будем, потому что это не критично,
 // а функция у нас уже была описана
-const createTaskTemplate = (point) => {
+const createPointTemplate = (point) => {
 
-  const {destinanion: name, notSanitizedDescription} = point;
-
-  // const isExpired = dueDate instanceof Date && isOverdueDate(dueDate, new Date());
-  // const isDateShowing = !!dueDate;
-
-  // const date = isDateShowing ? formatDate(dueDate) : ``;
-  // const time = isDateShowing ? formatTime(dueDate) : ``;
-  const description = encode(notSanitizedDescription);
-
-  const editButton = createButtonMarkup(`edit`);
-  const favoritesButton = createButtonMarkup(`favorites`, !point.isFavorite);
-
-  // const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
-  // const deadlineClass = isExpired ? `card--deadline` : ``;
+  const date = formatDate(point.date_from);
+  const timeFrom = formatTime(point.date_from);
+  const timeTo = formatTime(point.date_to);
+  const from = durationTime(point.date_from);
+  const to = durationTime(point.date_to);
+  const duration = isOneDay(point.date_to, point.date_from);
+  const pointPrice = point.offers.reduce((acc, offer) => {
+    return acc + offer.price;
+  }, point.base_price);
+  const offers = point.offers.map((offer) => (
+    `
+    <li class="event__offer">
+      <span class="event__offer-title">${offer.title}</span>
+      &plus;
+      &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
+     </li>
+     `)
+  ).join(`\n`);
 
   return (
     `
-    <article class="card card--${color} \${repeatClass} \${deadlineClass}">
-      <div class="card__form">
-        <div class="card__inner">
-          <div class="card__control">
-            ${editButton}
-            ${favoritesButton}
-          </div>
+    <li class="trip-events__item">
+      <div class="event">
+        <div class="event__type">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${point.type}.png" alt="Event type icon">
+        </div>
+        <h3 class="event__title">${point.type} to ${point.destination.name}</h3>
 
-        <div class="card__color-bar">
-          <svg class="card__color-bar-wave" width="100%" height="10">
-            <use xlink:href="#wave"></use>
-          </svg>
+        <div class="event__schedule">
+          <p class="event__time">
+            <time class="event__start-time" datetime="2019-03-18T10:30">${timeFrom}</time>
+            &mdash;
+            <time class="event__end-time" datetime="2019-03-18T11:00">${timeTo}</time>
+          </p>
+          <p class="event__duration">${point.date_from}</p>
+          <p class="event__duration">${point.date_to}</p>
         </div>
 
-        <div class="card__textarea-wrap">
-          <p class="card__text">${description}</p>
-        </div>
+        <p class="event__price">
+          &euro;&nbsp;<span class="event__price-value">${pointPrice}</span>
+        </p>
 
-        <div class="card__settings">
-          <div class="card__details">
-            <div class="card__dates">
-              <div class="card__date-deadline">
-                <p class="card__input-deadline-wrap">
-                  <span class="card__date">\${date}</span>
-                  <span class="card__time">\${time}</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <h4 class="visually-hidden">Offers:</h4>
+        <ul class="event__selected-offers">
+          ${offers}
+        </ul>
+
+        <button class="event__rollup-btn" type="button">
+          <span class="visually-hidden">Open event</span>
+        </button>
       </div>
-    </div>
-  </article>`);
+    </li>
+    `
+  );
+
+
+  // const {destinanion: name, notSanitizedDescription} = point;
+  //
+  // // const isExpired = dueDate instanceof Date && isOverdueDate(dueDate, new Date());
+  // // const isDateShowing = !!dueDate;
+  //
+  // // const date = isDateShowing ? formatDate(dueDate) : ``;
+  // // const time = isDateShowing ? formatTime(dueDate) : ``;
+  // const description = encode(notSanitizedDescription);
+  //
+  // const editButton = createButtonMarkup(`edit`);
+  // const favoritesButton = createButtonMarkup(`favorites`, !point.isFavorite);
+  //
+  // // const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
+  // // const deadlineClass = isExpired ? `card--deadline` : ``;
+
+  // return createPointMarkup(point);
+
+  //  (
+  //   `
+  //   <article class="card card--${color} \${repeatClass} \${deadlineClass}">
+  //     <div class="card__form">
+  //       <div class="card__inner">
+  //         <div class="card__control">
+  //           ${editButton}
+  //           ${favoritesButton}
+  //         </div>
+  //
+  //       <div class="card__color-bar">
+  //         <svg class="card__color-bar-wave" width="100%" height="10">
+  //           <use xlink:href="#wave"></use>
+  //         </svg>
+  //       </div>
+  //
+  //       <div class="card__textarea-wrap">
+  //         <p class="card__text">${description}</p>
+  //       </div>
+  //
+  //       <div class="card__settings">
+  //         <div class="card__details">
+  //           <div class="card__dates">
+  //             <div class="card__date-deadline">
+  //               <p class="card__input-deadline-wrap">
+  //                 <span class="card__date">\${date}</span>
+  //                 <span class="card__time">\${time}</span>
+  //               </p>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </div>
+  // </article>`);
 };
 
 export default class Point extends AbstractComponent {
@@ -80,23 +138,18 @@ export default class Point extends AbstractComponent {
   }
 
   getTemplate() {
-    return createTaskTemplate(this._point);
+    return createPointTemplate(this._point);
   }
 
-  setEditButtonClickHandler(handler) {
-    this.getElement().querySelector(`.card__btn--edit`)
-      .addEventListener(`click`, handler);
-  }
-
-  setFavoritesButtonClickHandler(handler) {
-    this.getElement().querySelector(`.card__btn--favorites`)
-      .addEventListener(`click`, handler);
-  }
-
-  setArchiveButtonClickHandler(handler) {
-    this.getElement().querySelector(`.card__btn--archive`)
-      .addEventListener(`click`, handler);
-  }
+  // setEditButtonClickHandler(handler) {
+  //   this.getElement().querySelector(`.event__rollup-btn`)
+  //     .addEventListener(`click`, handler);
+  // }
+  //
+  // setFavoritesButtonClickHandler(handler) {
+  //   this.getElement().querySelector(`.event__favorite-btn`)
+  //     .addEventListener(`click`, handler);
+  // }
 }
 
 
@@ -159,12 +212,12 @@ const createPointMarkup = (point) => {
   const from = durationTime(point.date_from);
   const to = durationTime(point.date_to);
   const duration = isOneDay(point.date_to, point.date_from);
-  const offersPrice = point.offers.reduce((acc, offer) => {
+  const pointPrice = point.offers.reduce((acc, offer) => {
     return acc + offer.price;
   }, point.base_price);
   const offers = point.offers.map((offer) => (
     `
-    <li class="event__offer">
+    <li hidden class="event__offer">
       <span class="event__offer-title">${offer.title}</span>
       &plus;
       &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
@@ -179,7 +232,7 @@ const createPointMarkup = (point) => {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${point.type}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${point.type} to ${point.destination.name} ${point.base_price}</h3>
+        <h3 class="event__title">${point.type} to ${point.destination.name}</h3>
 
         <div class="event__schedule">
           <p class="event__time">
@@ -192,7 +245,7 @@ const createPointMarkup = (point) => {
         </div>
 
         <p class="event__price">
-          &euro;&nbsp;<span class="event__price-value">${offersPrice}</span>
+          &euro;&nbsp;<span class="event__price-value">${pointPrice}</span>
         </p>
 
         <h4 class="visually-hidden">Offers:</h4>
@@ -223,15 +276,13 @@ const getOffersBypointType = (offers) => {
   // console.log(offers);
 };
 
-const createPointsTemplate = (points) => {
-  // console.log(points);
-  const pointsMarkup = points.map((it) => (createPointMarkup(it))).join(`\n`);
+// const createPointsTemplate = (points) => {
+//   // console.log(points);
+//   const pointsMarkup = points.map((it) => (createPointMarkup(it))).join(`\n`);
+//   return (
+//     `
+//     ${pointsMarkup}`
+//   );
+// };
 
-
-  return (
-    `
-    ${pointsMarkup}`
-  );
-};
-
-export {createPointsTemplate, getOffersBypointType, createWrapTrip};
+// export {getOffersBypointType, createWrapTrip};

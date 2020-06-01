@@ -28,7 +28,7 @@ export default class Provider {
     if (isOnline()) {
       return this._api.getPoints()
         .then((points) => {
-          const items = createStoreStructure(points); // (tasks.map((task) => task.toRAW()));
+          const items = createStoreStructure(points); // .map((point) => point.toRAW()));
           this._store.setItems(items);
           return points;
         });
@@ -37,6 +37,21 @@ export default class Provider {
     const storePoints = Object.values(this._store.getItems());
 
     return Promise.resolve(Point.parseTasks(storePoints));
+  }
+
+  getOffers() {
+    if (isOnline()) {
+      return this._api.getOffers()
+        .then((offers) => {
+          const items = createStoreStructure(offers); // (tasks.map((task) => task.toRAW()));
+          this._store.setItems(items);
+          return offers;
+        });
+    }
+
+    const storeOffers = Object.values(this._store.getItems());
+
+    return Promise.resolve(Point.parseTasks(storeOffers));
   }
 
   createTask(task) {
