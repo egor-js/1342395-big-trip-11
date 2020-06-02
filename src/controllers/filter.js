@@ -1,12 +1,12 @@
 import FilterComponent from "../components/filter.js";
 import {FilterType} from "../const.js";
 import {render, replace, RenderPosition} from "../utils/render.js";
-import {getTasksByFilter} from "../utils/filter.js";
+import {getPointsByFilter} from "../utils/filter.js";
 
 export default class FilterController {
-  constructor(container, tasksModel) {
+  constructor(container, pointsModel) {
     this._container = container;
-    this._tasksModel = tasksModel;
+    this._pointsModel = pointsModel;
 
     this._activeFilterType = FilterType.ALL;
     this._filterComponent = null;
@@ -14,16 +14,16 @@ export default class FilterController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
 
-    this._tasksModel.setDataChangeHandler(this._onDataChange);
+    this._pointsModel.setDataChangeHandler(this._onDataChange);
   }
 
   render() {
     const container = this._container;
-    const allTasks = this._tasksModel.getTasksAll();
+    const allPoints = this._pointsModel.getPointsAll();
     const filters = Object.values(FilterType).map((filterType) => {
       return {
         name: filterType,
-        count: getTasksByFilter(allTasks, filterType).length,
+        count: getPointsByFilter(allPoints, filterType).length,
         checked: filterType === this._activeFilterType,
       };
     });
@@ -40,7 +40,7 @@ export default class FilterController {
   }
 
   _onFilterChange(filterType) {
-    this._tasksModel.setFilter(filterType);
+    this._pointsModel.setFilter(filterType);
     this._activeFilterType = filterType;
   }
 

@@ -3,24 +3,23 @@ export default class Point {
     this.id = data[`id`];
     this.destination = data[`destination`] || ``;
     this.offers = data[`offers`] || ``;
-    this.dateFrom = data[`date_from`]; // ? new Date(data[`due_date`]) : null;
-    this.dateTo = data[`date_to`]; // ? new Date(data[`due_date`]) : null;
+    this.dateFrom = data[`date_from`];
+    this.dateTo = data[`date_to`];
     this.type = data[`type`];
     this.isFavorite = Boolean(data[`is_favorite`]);
     this.basePrice = data[`base_price`];
   }
 
   toRAW() {
-    console.log(`privert from ${this}  toRAW`);
     return {
       "id": this.id,
       "destination": this.destination,
-      // "due_date": this.dueDate ? this.dueDate.toISOString() : null,
-      // "repeating_days": this.repeatingDays,
-      // "color": this.color,
+      "offers": this.offers,
+      "date_from": this.dateFrom,
+      "date_to": this.dateTo,
       "type": this.type,
       "is_favorite": this.isFavorite,
-      // "is_archived": this.isArchive,
+      "base_price": this.basePrice,
     };
   }
 

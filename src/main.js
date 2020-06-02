@@ -8,16 +8,18 @@
 // import {createSortTemplate} from "../src/components/createSortTemplate.js";
 // import {createTripPoints, tripPointsMocks, tempRandomOffers, tempPoint} from "../src/mock/mocksData.js";
 
-import {createControlsTemplate} from "../src/components/tabs.js";
+import {createSortTemplate} from "../src/components/createSortTemplate.js";
+import {createControlsTemplate} from "../src/components/controls.js";
 import {createTripinfoTemplate} from "../src/components/createTripinfoTemplate.js";
-import {createFilterTemplate} from "../src/components/filter.js";
+import {createTripDay} from "../src/components/tripDay.js";
 import {createNewPoint} from "../src/components/create-new-point-without-destination.js";
 import API from "../src/api/api.js";
-import Store from "../src/api/store.js";
+import FilterController from "./controllers/filter.js";
 import Provider from "../src/api/provider.js";
 import PointsModel from "../src/models/points.js";
 import PageController from "./controllers/page.js";
 import PageComponent from "./components/page.js";
+import Store from "../src/api/store.js";
 import {render, RenderPosition} from "./utils/render.js";
 
 const AUTHORIZATION_TOCKEN = `Basic 3u3udjnbccec333`;
@@ -30,6 +32,7 @@ const api = new API(END_POINT, AUTHORIZATION_TOCKEN);
 const store = new Store(STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store);
 const pointsModel = new PointsModel();
+
 const pageComponent = new PageComponent();
 const pageController = new PageController(pageComponent, pointsModel, apiWithProvider);
 
@@ -38,27 +41,36 @@ const renderOLD = (container, template, place) => {
 };
 
 const siteMainElement = document.querySelector(`.trip-main`);
-const siteHeaderElement = siteMainElement.querySelector(`.trip-controls`);
-const siteTripEvents = document.querySelector(`.trip-events`);
-const filters = [`everything`, `future`, `past`];
 
-renderOLD(siteHeaderElement, createTripinfoTemplate(), `afterbegin`);
-renderOLD(siteHeaderElement, createControlsTemplate(), `beforeend`);
-renderOLD(siteHeaderElement, createFilterTemplate(filters), `beforeend`);
+// const siteHeaderElement = siteMainElement.querySelector(`.trip-controls`);
+const siteTripEvents = document.querySelector(`.trip-events`);
+// const filters = [`everything`, `future`, `past`];
+
+const siteControlTabs = document.querySelector(`.trip-main__trip-controls.trip-controls`);
+console.log(siteControlTabs);
+renderOLD(siteMainElement, createTripinfoTemplate(), `afterbegin`);
+renderOLD(siteControlTabs, createControlsTemplate(), `beforeend`);
+renderOLD(siteTripEvents, createSortTemplate(), `beforeend`);
+renderOLD(siteTripEvents, createTripDay(), `beforeend`);
+
+
+const filterController = new FilterController(siteControlTabs, pointsModel);
+
+filterController.render();
+// renderOLD(siteHeaderElement, createFilterTemplate(filters), `beforeend`);
 // const siteEventsHeader = document.querySelector(`.trip-events`);
 // console.log(pageComponent);
 render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
 
 // render(siteEventsHeader, createSortTemplate(), `beforeend`);
-// render(siteEventsHeader, createWrapTrip(), `beforeend`);
 // createWrapTripDays();
 
-const siteHeaderTripDay = document.querySelector(`.trip-events__list`);
+// const siteHeaderTripDay = document.querySelector(`.trip-events__list`);
 
 apiWithProvider.getPoints()
   .then((points) => {
     pointsModel.setPoints(points);
-    console.log(pageController);
+    console.log(pointsModel);
     pageController.render();
     console.log(pageController);
   });
