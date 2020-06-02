@@ -1,13 +1,3 @@
-
-// import {utils} from "../src/utils.js";
-// import {createTripDay} from "../src/components/tripDay.js";
-// import {createPointsTemplate, createWrapTrip} from "../src/components/point.js";
-// import {createNewEventWithDestination} from "../src/components/createNewEventWithDestination.js";
-// import {createFirstEventTemplate} from "../src/components/createFirstEventTemplate.js";
-// import {ctreateStatTemplate} from "../src/components/ctreateStatTemplate.js";
-// import {createSortTemplate} from "../src/components/createSortTemplate.js";
-// import {createTripPoints, tripPointsMocks, tempRandomOffers, tempPoint} from "../src/mock/mocksData.js";
-
 import {createSortTemplate} from "../src/components/createSortTemplate.js";
 import {createControlsTemplate} from "../src/components/controls.js";
 import {createTripinfoTemplate} from "../src/components/createTripinfoTemplate.js";
@@ -17,6 +7,7 @@ import API from "../src/api/api.js";
 import FilterController from "./controllers/filter.js";
 import Provider from "../src/api/provider.js";
 import PointsModel from "../src/models/points.js";
+import OffersModel from "../src/models/offers.js";
 import PageController from "./controllers/page.js";
 import PageComponent from "./components/page.js";
 import Store from "../src/api/store.js";
@@ -32,7 +23,6 @@ const api = new API(END_POINT, AUTHORIZATION_TOCKEN);
 const store = new Store(STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store);
 const pointsModel = new PointsModel();
-
 const pageComponent = new PageComponent();
 const pageController = new PageController(pageComponent, pointsModel, apiWithProvider);
 
@@ -41,13 +31,9 @@ const renderOLD = (container, template, place) => {
 };
 
 const siteMainElement = document.querySelector(`.trip-main`);
-
-// const siteHeaderElement = siteMainElement.querySelector(`.trip-controls`);
 const siteTripEvents = document.querySelector(`.trip-events`);
-// const filters = [`everything`, `future`, `past`];
 
 const siteControlTabs = document.querySelector(`.trip-main__trip-controls.trip-controls`);
-console.log(siteControlTabs);
 renderOLD(siteMainElement, createTripinfoTemplate(), `afterbegin`);
 renderOLD(siteControlTabs, createControlsTemplate(), `beforeend`);
 renderOLD(siteTripEvents, createSortTemplate(), `beforeend`);
@@ -70,14 +56,16 @@ render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
 apiWithProvider.getPoints()
   .then((points) => {
     pointsModel.setPoints(points);
-    console.log(pointsModel);
     pageController.render();
-    console.log(pageController);
   });
+
+const offersModel = new OffersModel();
 
 apiWithProvider.getOffers()
     .then((offers) => {
-      // console.log(offers);
+      // console.log(offersModel);
+      offersModel.setOffers(offers);
+      console.log(offersModel.getOffersByType(`taxi`));
       // const forRender = createPointsTemplate(points);
       // pointModel.getpointsAll(points);
       // render(siteHeaderTripDay, forRender, `beforeend`);
