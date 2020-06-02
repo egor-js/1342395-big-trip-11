@@ -21,74 +21,10 @@ const isAllowableDescriptionLength = (description) => {
     length <= MAX_DESCRIPTION_LENGTH;
 };
 
-// const createColorsMarkup = (colors, currentColor) => {
-//   return colors
-//     .map((color, index) => {
-//       return (
-//         `<input
-//           type="radio"
-//           id="color-${color}-${index}"
-//           class="card__color-input card__color-input--${color} visually-hidden"
-//           name="color"
-//           value="${color}"
-//           ${currentColor === color ? `checked` : ``}
-//         />
-//         <label
-//           for="color-${color}--${index}"
-//           class="card__color card__color--${color}"
-//           >${color}</label
-//         >`
-//       );
-//     })
-//     .join(`\n`);
-// };
-
-// const createRepeatingDaysMarkup = (days, repeatingDays) => {
-//   return days
-//     .map((day, index) => {
-//       const isChecked = repeatingDays[day];
-//       return (
-//         `<input
-//           class="visually-hidden card__repeat-day-input"
-//           type="checkbox"
-//           id="repeat-${day}-${index}"
-//           name="repeat"
-//           value="${day}"
-//           ${isChecked ? `checked` : ``}
-//         />
-//         <label class="card__repeat-day" for="repeat-${day}-${index}"
-//           >${day}</label
-//         >`
-//       );
-//     })
-//     .join(`\n`);
-// };
-
-const createPointEditTemplate = (Point, offers) => {
-  // const {dueDate, color} = task;
-  const {isDateShowing, isRepeatingTask, activeRepeatingDays, currentDescription, externalData} = options;
-
-  // const description = encode(currentDescription);
-
-  // const isExpired = dueDate instanceof Date && isOverdueDate(dueDate, new Date());
-  // const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||
-  //   (isRepeatingTask && !isRepeating(activeRepeatingDays)) ||
-  // !isAllowableDescriptionLength(description);
-
-  // const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
-  // const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``;
-
-  // const repeatClass = isRepeatingTask ? `card--repeat` : ``;
-  // const deadlineClass = isExpired ? `card--deadline` : ``;
-
-  // const colorsMarkup = createColorsMarkup(COLORS, color);
-  // const repeatingDaysMarkup = createRepeatingDaysMarkup(DAYS, activeRepeatingDays);
-
-  // const deleteButtonText = externalData.deleteButtonText;
-  // const saveButtonText = externalData.saveButtonText;
-
+const createPointEditTemplate = (point, offers) => {
+  // const {} = offers;
   return (
-    `<form class="trip-events__item  event  event--edit" action="#" method="post">
+    `<form class="event  event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
           <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -162,12 +98,11 @@ const createPointEditTemplate = (Point, offers) => {
           <label class="event__label  event__type-output" for="event-destination-1">
             Flight to
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Chamonix" list="destination-list-1">
           <datalist id="destination-list-1">
             <option value="Amsterdam"></option>
             <option value="Geneva"></option>
             <option value="Chamonix"></option>
-            <option value="Saint Petersburg"></option>
           </datalist>
         </div>
 
@@ -175,12 +110,12 @@ const createPointEditTemplate = (Point, offers) => {
           <label class="visually-hidden" for="event-start-time-1">
             From
           </label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 00:00">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 12:25">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">
             To
           </label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 00:00">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 13:35">
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -188,12 +123,25 @@ const createPointEditTemplate = (Point, offers) => {
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="160">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">Cancel</button>
+        <button class="event__reset-btn" type="reset">Delete</button>
+
+        <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" checked>
+        <label class="event__favorite-btn" for="event-favorite-1">
+          <span class="visually-hidden">Add to favorite</span>
+          <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
+            <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
+          </svg>
+        </label>
+
+        <button class="event__rollup-btn" type="button">
+          <span class="visually-hidden">Open event</span>
+        </button>
       </header>
+
       <section class="event__details">
         <section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
@@ -266,7 +214,7 @@ export default class PointEdit extends AbstractSmartComponent {
     // this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
     // this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
     this._currentDescription = point.destination;
-    // this._externalData = DefaultData;
+    this._externalData = DefaultData;
     this._flatpickr = null;
     this._submitHandler = null;
     this._deleteButtonClickHandler = null;
@@ -362,12 +310,12 @@ export default class PointEdit extends AbstractSmartComponent {
   _subscribeOnEvents() {
     const element = this.getElement();
 
-    element.querySelector(`.card__text`)
+    element.querySelector(`.event__input.event__input--destination`)
       .addEventListener(`input`, (evt) => {
-        this._currentDescription = evt.target.value;
+        this._currentDestination = evt.target.value;
 
-        const saveButton = this.getElement().querySelector(`.card__save`);
-        saveButton.disabled = !isAllowableDescriptionLength(this._currentDescription);
+        // const saveButton = this.getElement().querySelector(`.event__save-btn`);
+        // saveButton.disabled = !isAllowableDescriptionLength(this._currentDestination);
       });
 
     // element.querySelector(`.card__date-deadline-toggle`)
@@ -376,7 +324,7 @@ export default class PointEdit extends AbstractSmartComponent {
     //
     //     this.rerender();
     //   });
-    //
+
     // element.querySelector(`.card__repeat-toggle`)
     //   .addEventListener(`click`, () => {
     //     this._isRepeatingTask = !this._isRepeatingTask;
@@ -384,13 +332,12 @@ export default class PointEdit extends AbstractSmartComponent {
     //     this.rerender();
     //   });
 
-    // const repeatDays = element.querySelector(`.card__repeat-days`);
-    // if (repeatDays) {
-    //   repeatDays.addEventListener(`change`, (evt) => {
-    //     this._activeRepeatingDays[evt.target.value] = evt.target.checked;
-    //
-    //     this.rerender();
-    //   });
-    // }
+    const repeatDays = element.querySelector(`.card__repeat-days`);
+    if (repeatDays) {
+      repeatDays.addEventListener(`change`, (evt) => {
+        this._activeRepeatingDays[evt.target.value] = evt.target.checked;
+        this.rerender();
+      });
+    }
   }
 }

@@ -7,7 +7,7 @@ const getFilterNameById = (id) => {
 };
 
 const createFilterMarkup = (filter, isChecked) => {
-  const {name, count} = filter;
+  const {name} = filter;
   return (
     `<div class="trip-filters__filter">
     <input

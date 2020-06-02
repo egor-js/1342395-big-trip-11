@@ -8,6 +8,7 @@ import FilterController from "./controllers/filter.js";
 import Provider from "../src/api/provider.js";
 import PointsModel from "../src/models/points.js";
 import OffersModel from "../src/models/offers.js";
+import DestinationsModel from "../src/models/destinations.js";
 import PageController from "./controllers/page.js";
 import PageComponent from "./components/page.js";
 import Store from "../src/api/store.js";
@@ -23,22 +24,26 @@ const api = new API(END_POINT, AUTHORIZATION_TOCKEN);
 const store = new Store(STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store);
 const pointsModel = new PointsModel();
+const offersModel = new OffersModel();
+const destinationsModel = new DestinationsModel();
 const pageComponent = new PageComponent();
+// console.log(pageComponent);
+// pageComponent.getElement();
+// console.log(pageComponent);
 const pageController = new PageController(pageComponent, pointsModel, apiWithProvider);
 
-const renderOLD = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
+// const renderOLD = (container, template, place) => {
+//   container.insertAdjacentHTML(place, template);
+// };
 
 const siteMainElement = document.querySelector(`.trip-main`);
 const siteTripEvents = document.querySelector(`.trip-events`);
 
 const siteControlTabs = document.querySelector(`.trip-main__trip-controls.trip-controls`);
-renderOLD(siteMainElement, createTripinfoTemplate(), `afterbegin`);
-renderOLD(siteControlTabs, createControlsTemplate(), `beforeend`);
-renderOLD(siteTripEvents, createSortTemplate(), `beforeend`);
-renderOLD(siteTripEvents, createTripDay(), `beforeend`);
-
+// renderOLD(siteMainElement, createTripinfoTemplate(), `afterbegin`);
+// renderOLD(siteControlTabs, createControlsTemplate(), `beforeend`);
+// renderOLD(siteTripEvents, createSortTemplate(), `beforeend`);
+// renderOLD(siteTripEvents, createTripDay(), `beforeend`);
 
 const filterController = new FilterController(siteControlTabs, pointsModel);
 
@@ -47,7 +52,10 @@ filterController.render();
 // const siteEventsHeader = document.querySelector(`.trip-events`);
 // console.log(pageComponent);
 render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
-
+render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
+// render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
+// filterController.render();
+// render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
 // render(siteEventsHeader, createSortTemplate(), `beforeend`);
 // createWrapTripDays();
 
@@ -55,39 +63,52 @@ render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
 
 apiWithProvider.getPoints()
   .then((points) => {
+    // debugger;
+    // console.log(points);
+    // console.log(pointsModel);
     pointsModel.setPoints(points);
+    // console.log(pointsModel);
+    // console.log(pageController);
     pageController.render();
   });
 
-const offersModel = new OffersModel();
 
 apiWithProvider.getOffers()
     .then((offers) => {
       // console.log(offersModel);
       offersModel.setOffers(offers);
-      console.log(offersModel.getOffersByType(`taxi`));
+      // console.log(offersModel.getOffersByType(`taxi`));
       // const forRender = createPointsTemplate(points);
       // pointModel.getpointsAll(points);
       // render(siteHeaderTripDay, forRender, `beforeend`);
     });
 
-// window.addEventListener(`load`, () => {
-//   navigator.serviceWorker.register(`/sw.js`)
-//         .then(() => {
-//           // Действие, в случае успешной регистрации ServiceWorker
-//         }).catch(() => {
-//           // Действие, в случае ошибки при регистрации ServiceWorker
-//         });
-// });
+apiWithProvider.getDestinations()
+.then((destinations) => {
+  // console.log(offersModel);
+  destinationsModel.setDestinations(destinations);
+  // console.log(destinationsModel.getDistinationsByName(`Moscow`));
+  // const forRender = createPointsTemplate(points);
+  // pointModel.getpointsAll(points);
+  // render(siteHeaderTripDay, forRender, `beforeend`);
+});
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`)
+        .then(() => {
+          // Действие, в случае успешной регистрации ServiceWorker
+        }).catch(() => {
+          // Действие, в случае ошибки при регистрации ServiceWorker
+        });
+});
 //
-// window.addEventListener(`online`, () => {
-//   document.title = document.title.replace(` [offline]`, ``);
-//   apiWithProvider.sync();
-// });
-//
-// window.addEventListener(`offline`, () => {
-//   document.title += ` [offline]`;
-// });
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+  apiWithProvider.sync();
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});
 
 const wrapSection = document.querySelector(`section.trip-events`);
 const addButton = document.querySelector(`.trip-main__event-add-btn`);
@@ -95,7 +116,7 @@ const addButton = document.querySelector(`.trip-main__event-add-btn`);
 addButton.addEventListener(`click`, () => {
   const newPointTemp = createNewPoint();
   addButton.setAttribute(`disabled`, ``);
-  renderOLD(wrapSection, newPointTemp, `afterbegin`);
+  render(wrapSection, newPointTemp, `afterbegin`);
   wrapSection.querySelector(`.event__reset-btn`).addEventListener(`click`, () => {
     addButton.removeAttribute(`disabled`, ``);
     wrapSection.removeChild(wrapSection.children[0]);

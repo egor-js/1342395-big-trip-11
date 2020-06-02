@@ -13,14 +13,14 @@ export const Mode = {
 };
 
 export const EmptyPoint = {
-  description: ``,
+  id: `-1`,
   dateTo: null,
   dateFrom: null,
-  destination: ``,
-  type: ``,
-  // color: COLOR.BLACK,
+  destination: `EmptyDist`,
+  type: `EmptyType`,
   isFavorite: false,
   isArchive: false,
+  basePrice: `Zero`,
 };
 
 const parseFormData = (formData) => {
@@ -37,7 +37,7 @@ const parseFormData = (formData) => {
     // acc[it] = true;
     // return acc;
     // }, repeatingDays),
-    "color": formData.get(`color`),
+
     "is_favorite": false,
     "is_done": false,
   });
