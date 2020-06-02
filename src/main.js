@@ -39,13 +39,15 @@ const renderOLD = (container, template, place) => {
 
 const siteMainElement = document.querySelector(`.trip-main`);
 const siteHeaderElement = siteMainElement.querySelector(`.trip-controls`);
+const siteTripEvents = document.querySelector(`.trip-events`);
 const filters = [`everything`, `future`, `past`];
-
 
 renderOLD(siteHeaderElement, createTripinfoTemplate(), `afterbegin`);
 renderOLD(siteHeaderElement, createControlsTemplate(), `beforeend`);
 renderOLD(siteHeaderElement, createFilterTemplate(filters), `beforeend`);
-const siteEventsHeader = document.querySelector(`.trip-events`);
+// const siteEventsHeader = document.querySelector(`.trip-events`);
+// console.log(pageComponent);
+render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
 
 // render(siteEventsHeader, createSortTemplate(), `beforeend`);
 // render(siteEventsHeader, createWrapTrip(), `beforeend`);
@@ -56,7 +58,9 @@ const siteHeaderTripDay = document.querySelector(`.trip-events__list`);
 apiWithProvider.getPoints()
   .then((points) => {
     pointsModel.setPoints(points);
+    console.log(pageController);
     pageController.render();
+    console.log(pageController);
   });
 
 apiWithProvider.getOffers()

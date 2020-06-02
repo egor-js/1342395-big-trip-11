@@ -6,8 +6,8 @@ export const RenderPosition = {
 export const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;
-
-  return newElement.firstChild;
+  const forReturn = newElement.firstChild;
+  return forReturn;
 };
 
 export const render = (container, component, place) => {

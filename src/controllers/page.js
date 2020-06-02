@@ -12,7 +12,7 @@ const renderPoints = (pointListElement, points, onDataChange, onViewChange) => {
   return points.map((point) => {
     const pointController = new PointController(pointListElement, onDataChange, onViewChange);
     pointController.render(point, PointControllerMode.DEFAULT);
-    console.log(pointController);
+    // console.log(pointController);
     return pointController;
   });
 };
@@ -93,9 +93,10 @@ export default class PageController {
   _renderPoints(points) {
     const pointListElement = this._pointsComponent.getElement();
     const newPoint = renderPoints(pointListElement, points, this._onDataChange, this._onViewChange);
-    // console.log(newPoint);
     this._showedPointControllers = this._showedPointControllers.concat(newPoint);
     this._showingPointCount = this._showedPointControllers.length;
+    // console.log(newPoint);
+    // console.log(this._showedPointCount);
   }
   // createTask() {
   //   if (this._creatingTask) {
@@ -125,9 +126,9 @@ export default class PageController {
   //   this._loadMoreButtonComponent.setClickHandler(this._onLoadMoreButtonClick);
   // }
 
-  _updatePoints(count) {
+  _updatePoints() {
     this._removePoints();
-    this._renderPoints(this._pointsModel.getPoints().slice(0, count));
+    this._renderPoints(this._pointsModel.getPoints()); // .slice(0, count));
     // this._renderLoadMoreButton();
   }
 
@@ -136,16 +137,16 @@ export default class PageController {
       this._creatingTask = null;
       if (newData === null) {
         pointController.destroy();
-        this._updateTasks(this._showingTasksCount);
+        this._updatePints();
       } else {
-        this._api.createTask(newData)
-          .then((taskModel) => {
-            this._pointsModel.addTask(taskModel);
-            pointController.render(taskModel, PointControllerMode.DEFAULT);
+        this._api.createPoint(newData)
+          .then((pointModel) => {
+            this._pointsModel.addPoint(pointModel);
+            pointController.render(pointModel, PointControllerMode.DEFAULT);
 
-            if (this._showingTasksCount % SHOWING_TASKS_COUNT_BY_BUTTON === 0) {
-              const destroyedTask = this._showedPointControllers.pop();
-              destroyedTask.destroy();
+            if (this._showingpointCount % SHOWING_TASKS_COUNT_BY_BUTTON === 0) {
+              const destroyedPoint = this._showedPointControllers.pop();
+              destroyedPoint.destroy();
             }
 
             this._showedTaskControllers = [].concat(pointController, this._showedTaskControllers);
@@ -160,20 +161,21 @@ export default class PageController {
     } else if (newData === null) {
       this._api.deleteTask(oldData.id)
         .then(() => {
-          this._pointsModel.removeTask(oldData.id);
-          this._updateTasks(this._showingTasksCount);
+          this._pointsModel.removePoint(oldData.id);
+          this._updateTasks(this._showingPointsCount);
         })
         .catch(() => {
           pointController.shake();
         });
     } else {
-      this._api.updateTask(oldData.id, newData)
-        .then((taskModel) => {
-          const isSuccess = this._pointsModel.updateTask(oldData.id, taskModel);
+      this._api.updatePoint(oldData.id, newData)
+        .then((pointModel) => {
+          const isSuccess = this._pointsModel.updatePoint(oldData.id, pointModel);
 
           if (isSuccess) {
-            pointController.render(taskModel, PointControllerMode.DEFAULT);
-            this._updateTasks(this._showingTasksCount);
+            pointController.render(pointModel, PointControllerMode.DEFAULT);
+            this._updateTasks();
+            // this._updateTasks(this._showingPointCount);
           }
         })
         .catch(() => {
@@ -183,7 +185,7 @@ export default class PageController {
   }
 
   _onViewChange() {
-    this._showedTaskControllers.forEach((it) => it.setDefaultView());
+    this._showedPointControllers.forEach((it) => it.setDefaultView());
   }
 
   // _onSortTypeChange(sortType) {
@@ -212,6 +214,6 @@ export default class PageController {
   // }
 
   _onFilterChange() {
-    this._updateTasks(SHOWING_TASKS_COUNT_ON_START);
+    this._updatePoints();
   }
 }

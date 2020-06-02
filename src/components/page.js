@@ -3,7 +3,7 @@ import AbstractComponent from "./abstract-component.js";
 
 const createPageTemplate = () => {
   return (
-    `<section class="trip-events"></section>`
+    `<ul class="trip-events__list"></ul>`
   );
 };
 
