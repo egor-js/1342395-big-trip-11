@@ -15,6 +15,34 @@ const descriptionTripPoint = [`Lorem ipsum dolor sit amet, consectetur adipiscin
   `Nunc fermentum tortor ac porta dapibus.`,
   `In rutrum ac purus sit amet tempus.`];
 
+const tempPoint = {
+  base_price: 900,
+  date_from: `2020-05-23T22:36:29.590Z`,
+  date_to: `2020-05-24T06:20:36.680Z`,
+  destination: {
+    description: `Milan, full of of cozy canteens where you can try the best coffee in the Middle East.`,
+    name: `Milan`,
+
+    pictures: [
+      {
+        description: `Milan zoo`,
+        src: `http://picsum.photos/300/200?r=0.9546779062681738`
+      },
+      {
+        description: `Milan parliament building`,
+        src: `http://picsum.photos/300/200?r=0.8628343842230302`,
+      }
+    ],
+  },
+  id: `0`,
+  is_favorite: false,
+  offers: [
+    {title: `Choose seats`, price: 160},
+    {title: `Upgrade to comfort class`, price: 170},
+    {title: `Add luggage`, price: 100}
+  ],
+  type: `ship`,
+};
 
 const offersByPointType = {
   "drive": [
@@ -157,4 +185,4 @@ const createTripPoints = function () {
   }
 };
 // typeTripPoint, tripCitys, descriptionTripPoint, offersByPointType,
-export {createTripPoints, tripPointsMocks, tempRandomOffers};
+export {createTripPoints, tripPointsMocks, tempRandomOffers, tempPoint};
