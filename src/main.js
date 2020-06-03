@@ -54,7 +54,29 @@ render(siteTripEvents, siteMenuComponent, RenderPosition.BEFOREEND);
 filterController.render();
 render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
 render(siteTripEvents, statisticsComponent, RenderPosition.BEFOREEND);
-statisticsComponent.show();
+// pageComponent.show();
+statisticsComponent.hide();
+
+siteMenuComponent.setOnChange((menuItem) => {
+  switch (menuItem) {
+    case MenuItem.NEW_TASK:
+      siteMenuComponent.setActiveItem(MenuItem.TASKS);
+      statisticsComponent.hide();
+      pageController.show();
+      pageController.createTask();
+      break;
+    case MenuItem.STATISTICS:
+      pageController.hide();
+      statisticsComponent.show();
+      break;
+    case MenuItem.TASKS:
+      statisticsComponent.hide();
+      console.log(pageController);
+      console.log(pageController.show());
+      pageController.show();
+      break;
+  }
+});
 
 const siteControlTabs = document.querySelector(`.trip-main__trip-controls.trip-controls`);
 // renderOLD(siteMainElement, createTripinfoTemplate(), `afterbegin`);

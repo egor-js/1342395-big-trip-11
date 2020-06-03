@@ -8,7 +8,9 @@ const createPointTemplate = (point) => {
   // const date = formatDate(point.date_from);
   const timeFrom = formatTime(point.date_from);
   const timeTo = formatTime(point.date_to);
+  console.log(point);
   const pointPrice = point.offers.reduce((acc, offer) => {
+    console.log(offer.price);
     return acc + offer.price;
   }, point.base_price);
   const offers = point.offers.map((offer) => (
