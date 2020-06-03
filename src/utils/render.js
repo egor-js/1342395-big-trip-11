@@ -12,12 +12,6 @@ export const createElement = function (template) {
 
 export const render = (container, component, place) => {
 
-  // console.log(`container:`);
-  // console.log(container);
-  // console.log(`component`);
-  // console.log(component);
-  // console.log(`place`);
-  // console.log(place);
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(component.getElement());

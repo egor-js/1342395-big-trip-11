@@ -9,7 +9,7 @@ const createPointTemplate = function (point) {
   const timeTo = formatTime(point.dateTo);
   const pointPrice = point.offers.reduce((acc, offer) => {
     return acc + offer.price;
-  }, point.baserice);
+  }, point.basePrice);
   const offers = point.offers.map((offer) => {
     return (
       `<li class="event__offer">
@@ -54,16 +54,11 @@ const createPointTemplate = function (point) {
 export default class Point extends AbstractComponent {
   constructor(point) {
     super();
-    // console.log(new.target);
-    // console.log(this);
     this._point = point;
-    this._pointTemplateTemp = this.getElement(this.getTemplate(point));
   }
 
   getTemplate() {
-    const forReturn = createPointTemplate(this._point);
-    this._pointTemplateTemp = forReturn;
-    return forReturn;
+    return createPointTemplate(this._point);
   }
 
   setEditButtonClickHandler(handler) {

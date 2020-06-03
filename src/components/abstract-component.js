@@ -7,8 +7,6 @@ export default class AbstractComponent {
     if (new.target === AbstractComponent) {
       throw new Error(`Can't instantiate AbstractComponent, only concrete one.`);
     }
-    // console.log(this);
-    // console.log(new.target);
     this._element = null;
   }
 

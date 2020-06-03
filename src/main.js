@@ -71,8 +71,6 @@ siteMenuComponent.setOnChange((menuItem) => {
       break;
     case MenuItem.TASKS:
       statisticsComponent.hide();
-      console.log(pageController);
-      console.log(pageController.show());
       pageController.show();
       break;
   }

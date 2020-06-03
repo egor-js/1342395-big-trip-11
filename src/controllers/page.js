@@ -22,10 +22,10 @@ const getSortedPoints = (points, sortType, from, to) => {
 
   switch (sortType) {
     case SortType.DATE_UP:
-      sortedPoints = showingPoints.sort((a, b) => a.dueDate - b.dueDate);
+      sortedPoints = showingPoints.sort((a, b) => a.dateFrom - b.dateFrom);
       break;
     case SortType.DATE_DOWN:
-      sortedPoints = showingPoints.sort((a, b) => b.dueDate - a.dueDate);
+      sortedPoints = showingPoints.sort((a, b) => b.dateFrom - a.dateFrom);
       break;
     case SortType.DEFAULT:
       sortedPoints = showingPoints;
