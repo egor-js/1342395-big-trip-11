@@ -1,14 +1,18 @@
 import AbstractComponent from "./abstract-component.js";
 
 export const MenuItem = {
-  NEW_TASK: `control__new-task`,
+  // NEW_TASK: `control__new-task`,
   STATISTICS: `control__statistic`,
   TASKS: `control__task`,
 };
 
 const createSiteMenuTemplate = () => {
   return (
-    `<section class="control__btn-wrap">
+    `<nav class="trip-controls__trip-tabs  trip-tabs">
+        <a class="trip-tabs__btn  trip-tabs__btn--active" href="#">Table</a>
+        <a class="trip-tabs__btn" href="#">Stats</a>
+    </nav>
+    <section class="control__btn-wrap">
       <input
         type="radio"
         name="control"

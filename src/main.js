@@ -1,19 +1,20 @@
 // import {createSortTemplate} from "../src/components/createSortTemplate.js";
 // import {createControlsTemplate} from "../src/components/controls.js";
-// import {createTripinfoTemplate} from "../src/components/createTripinfoTemplate.js";
 // import {createTripDay} from "../src/components/tripDay.js";
 // import {createNewPoint} from "../src/components/create-new-point-without-destination.js";
 import API from "../src/api/api.js";
-import FilterController from "./controllers/filter.js";
 import Provider from "../src/api/provider.js";
-import PointsModel from "../src/models/points.js";
+import Store from "../src/api/store.js";
+
+import FilterController from "./controllers/filter.js";
+import PageController from "./controllers/page.js";
 // import OffersModel from "../src/models/offers.js";
 // import DestinationsModel from "../src/models/destinations.js";
-import PageController from "./controllers/page.js";
 import PageComponent from "./components/page.js";
-import Store from "../src/api/store.js";
+import TripInfo from "./components/tripinfo.js";
+import StatisticsComponent from "./components/statistics.js";
 import SiteMenuComponent, {MenuItem} from "./components/site-menu.js";
-import StatisticsComponent from "../src/components/statistics.js";
+import PointsModel from "./models/points.js";
 import {render, RenderPosition} from "./utils/render.js";
 
 
@@ -25,13 +26,10 @@ const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 // const destinationsModel = new DestinationsModel();
 // const offersModel = new OffersModel();
-// const renderOLD = (container, template, place) => {
-  //   container.insertAdjacentHTML(place, template);
-  // };
 
-const dateTo = new Date();
+const dateNow = new Date();
 const dateFrom = (() => {
-  const d = new Date(dateTo);
+  const d = new Date(dateNow);
   d.setDate(d.getDate() - 7);
   return d;
 })();
@@ -43,28 +41,33 @@ const pointsModel = new PointsModel();
 
 const siteMainElement = document.querySelector(`.trip-main`);
 const siteTripEvents = document.querySelector(`.trip-events`);
+const siteControlsElement = document.querySelector(`.trip-main__trip-controls`);
+
+const tripinfo = new TripInfo();
+render(siteMainElement, tripinfo, RenderPosition.AFTERBEGIN);
+
+const filterController = new FilterController(siteControlsElement, pointsModel);
+
 const siteMenuComponent = new SiteMenuComponent();
-const statisticsComponent = new StatisticsComponent({points: pointsModel, dateFrom, dateTo});
+const statisticsComponent = new StatisticsComponent({points: pointsModel, dateFrom, dateNow});
 
 const pageComponent = new PageComponent();
 const pageController = new PageController(pageComponent, pointsModel, apiWithProvider);
-const filterController = new FilterController(siteMainElement, pointsModel);
 
-render(siteTripEvents, siteMenuComponent, RenderPosition.BEFOREEND);
+render(siteControlsElement, siteMenuComponent, RenderPosition.BEFOREEND);
 filterController.render();
 render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
 render(siteTripEvents, statisticsComponent, RenderPosition.BEFOREEND);
-// pageComponent.show();
 statisticsComponent.hide();
 
 siteMenuComponent.setOnChange((menuItem) => {
   switch (menuItem) {
-    case MenuItem.NEW_TASK:
-      siteMenuComponent.setActiveItem(MenuItem.TASKS);
-      statisticsComponent.hide();
-      pageController.show();
-      pageController.createTask();
-      break;
+    // case MenuItem.NEW_TASK:
+    //   siteMenuComponent.setActiveItem(MenuItem.TASKS);
+    //   statisticsComponent.hide();
+    //   pageController.show();
+    //   pageController.createTask();
+    //   break;
     case MenuItem.STATISTICS:
       pageController.hide();
       statisticsComponent.show();
@@ -76,24 +79,7 @@ siteMenuComponent.setOnChange((menuItem) => {
   }
 });
 
-// const siteControlTabs = document.querySelector(`.trip-main__trip-controls.trip-controls`);
-// renderOLD(siteMainElement, createTripinfoTemplate(), `afterbegin`);
-// renderOLD(siteControlTabs, createControlsTemplate(), `beforeend`);
-// renderOLD(siteTripEvents, createSortTemplate(), `beforeend`);
-// renderOLD(siteTripEvents, createTripDay(), `beforeend`);
-
 filterController.render();
-// const siteEventsHeader = document.querySelector(`.trip-events`);
-// renderOLD(siteHeaderElement, createFilterTemplate(filters), `beforeend`);
-// console.log(pageComponent);
-// render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
-// render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
-// filterController.render();
-// render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
-// render(siteEventsHeader, createSortTemplate(), `beforeend`);
-// createWrapTripDays();
-
-// const siteHeaderTripDay = document.querySelector(`.trip-events__list`);
 
 apiWithProvider.getPoints()
   .then((points) => {
