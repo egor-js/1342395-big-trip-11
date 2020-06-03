@@ -40,8 +40,8 @@ const apiWithProvider = new Provider(api, store);
 const pointsModel = new PointsModel();
 
 const siteMainElement = document.querySelector(`.trip-main`);
-const siteTripEvents = document.querySelector(`.trip-events`);
 const siteControlsElement = document.querySelector(`.trip-main__trip-controls`);
+const siteTripEvents = document.querySelector(`.trip-events`);
 
 const tripinfo = new TripInfo();
 render(siteMainElement, tripinfo, RenderPosition.AFTERBEGIN);
