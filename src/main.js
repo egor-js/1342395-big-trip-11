@@ -7,12 +7,15 @@ import API from "../src/api/api.js";
 import FilterController from "./controllers/filter.js";
 import Provider from "../src/api/provider.js";
 import PointsModel from "../src/models/points.js";
-import OffersModel from "../src/models/offers.js";
+// import OffersModel from "../src/models/offers.js";
 import DestinationsModel from "../src/models/destinations.js";
 import PageController from "./controllers/page.js";
 import PageComponent from "./components/page.js";
 import Store from "../src/api/store.js";
+import SiteMenuComponent, {MenuItem} from "./components/site-menu.js";
+import StatisticsComponent from "../src/components/statistics.js";
 import {render, RenderPosition} from "./utils/render.js";
+
 
 const AUTHORIZATION_TOCKEN = `Basic 3u3udjnbccec333`;
 const END_POINT = `https://11.ecmascript.pages.academy/big-trip`;
@@ -20,24 +23,38 @@ const STORE_PREFIX = `bigtrip-localstorage`;
 const STORE_VER = `v1`;
 const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
+// const destinationsModel = new DestinationsModel();
+// const offersModel = new OffersModel();
+// const renderOLD = (container, template, place) => {
+  //   container.insertAdjacentHTML(place, template);
+  // };
+
+const dateTo = new Date();
+const dateFrom = (() => {
+  const d = new Date(dateTo);
+  d.setDate(d.getDate() - 7);
+  return d;
+})();
+
 const api = new API(END_POINT, AUTHORIZATION_TOCKEN);
 const store = new Store(STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store);
 const pointsModel = new PointsModel();
-const offersModel = new OffersModel();
-const destinationsModel = new DestinationsModel();
-const pageComponent = new PageComponent();
-// console.log(pageComponent);
-// pageComponent.getElement();
-// console.log(pageComponent);
-const pageController = new PageController(pageComponent, pointsModel, apiWithProvider);
-
-// const renderOLD = (container, template, place) => {
-//   container.insertAdjacentHTML(place, template);
-// };
 
 const siteMainElement = document.querySelector(`.trip-main`);
 const siteTripEvents = document.querySelector(`.trip-events`);
+const siteMenuComponent = new SiteMenuComponent();
+const statisticsComponent = new StatisticsComponent({points: pointsModel, dateFrom, dateTo});
+
+const pageComponent = new PageComponent();
+const pageController = new PageController(pageComponent, pointsModel, apiWithProvider);
+const filterController = new FilterController(siteMainElement, pointsModel);
+
+render(siteTripEvents, siteMenuComponent, RenderPosition.BEFOREEND);
+filterController.render();
+render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
+render(siteTripEvents, statisticsComponent, RenderPosition.BEFOREEND);
+statisticsComponent.show();
 
 const siteControlTabs = document.querySelector(`.trip-main__trip-controls.trip-controls`);
 // renderOLD(siteMainElement, createTripinfoTemplate(), `afterbegin`);
@@ -45,13 +62,10 @@ const siteControlTabs = document.querySelector(`.trip-main__trip-controls.trip-c
 // renderOLD(siteTripEvents, createSortTemplate(), `beforeend`);
 // renderOLD(siteTripEvents, createTripDay(), `beforeend`);
 
-const filterController = new FilterController(siteControlTabs, pointsModel);
-
 filterController.render();
 // renderOLD(siteHeaderElement, createFilterTemplate(filters), `beforeend`);
 // const siteEventsHeader = document.querySelector(`.trip-events`);
 // console.log(pageComponent);
-render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
 render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
 // render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
 // filterController.render();
@@ -73,25 +87,26 @@ apiWithProvider.getPoints()
   });
 
 
-apiWithProvider.getOffers()
-    .then((offers) => {
-      // console.log(offersModel);
-      offersModel.setOffers(offers);
-      // console.log(offersModel.getOffersByType(`taxi`));
-      // const forRender = createPointsTemplate(points);
-      // pointModel.getpointsAll(points);
-      // render(siteHeaderTripDay, forRender, `beforeend`);
-    });
+// apiWithProvider.getOffers()
+//     .then((offers) => {
+//       // console.log(offersModel);
+//       offersModel.setOffers(offers);
+//       // console.log(offersModel.getOffersByType(`taxi`));
+//       // const forRender = createPointsTemplate(points);
+//       // pointModel.getpointsAll(points);
+//       // render(siteHeaderTripDay, forRender, `beforeend`);
+//     });
+//
+// apiWithProvider.getDestinations()
+// .then((destinations) => {
+//   // console.log(offersModel);
+//   destinationsModel.setDestinations(destinations);
+//   // console.log(destinationsModel.getDistinationsByName(`Moscow`));
+//   // const forRender = createPointsTemplate(points);
+//   // pointModel.getpointsAll(points);
+// render(siteHeaderTripDay, forRender, `beforeend`);
+// });
 
-apiWithProvider.getDestinations()
-.then((destinations) => {
-  // console.log(offersModel);
-  destinationsModel.setDestinations(destinations);
-  // console.log(destinationsModel.getDistinationsByName(`Moscow`));
-  // const forRender = createPointsTemplate(points);
-  // pointModel.getpointsAll(points);
-  // render(siteHeaderTripDay, forRender, `beforeend`);
-});
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`/sw.js`)
         .then(() => {

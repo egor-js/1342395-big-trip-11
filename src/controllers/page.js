@@ -1,6 +1,6 @@
-// import LoadMoreButtonComponent from "../components/load-more-button.js";
-// import NoTasksComponent from "../components/no-tasks.js";
-// import SortComponent, {SortType} from "../components/sort.js";
+import LoadMoreButtonComponent from "../components/load-more-button.js";
+import NoPointsComponent from "../components/no-points.js";
+import SortComponent, {SortType} from "../components/sort.js";
 import PointController, {Mode as PointControllerMode, EmptyPoint} from "../controllers/point.js";
 import PointsComponent from "../components/points.js";
 import {render, remove, RenderPosition} from "../utils/render.js";
@@ -17,24 +17,24 @@ const renderPoints = (pointListElement, points, onDataChange, onViewChange) => {
   });
 };
 
-// const getSortedTasks = (tasks, sortType, from, to) => {
-//   let sortedTasks = [];
-//   const showingTasks = tasks.slice();
-//
-//   switch (sortType) {
-//     case SortType.DATE_UP:
-//       sortedTasks = showingTasks.sort((a, b) => a.dueDate - b.dueDate);
-//       break;
-//     case SortType.DATE_DOWN:
-//       sortedTasks = showingTasks.sort((a, b) => b.dueDate - a.dueDate);
-//       break;
-//     case SortType.DEFAULT:
-//       sortedTasks = showingTasks;
-//       break;
-//   }
-//
-//   return sortedTasks.slice(from, to);
-// };
+const getSortedPoints = (points, sortType, from, to) => {
+  let sortedPoints = [];
+  const showingPoints = points.slice();
+
+  switch (sortType) {
+    case SortType.DATE_UP:
+      sortedPoints = showingPoints.sort((a, b) => a.dueDate - b.dueDate);
+      break;
+    case SortType.DATE_DOWN:
+      sortedPoints = showingPoints.sort((a, b) => b.dueDate - a.dueDate);
+      break;
+    case SortType.DEFAULT:
+      sortedPoints = showingPoints;
+      break;
+  }
+
+  return sortedPoints.slice(from, to);
+};
 
 
 export default class PageController {
@@ -45,19 +45,19 @@ export default class PageController {
 
     this._showedPointControllers = [];
     this._showingPointsCount = SHOWING_TASKS_COUNT_ON_START;
-    // this._noTasksComponent = new NoTasksComponent();
-    // this._sortComponent = new SortComponent();
+    this._noPointsComponent = new NoPointsComponent();
+    this._sortComponent = new SortComponent();
     this._pointsComponent = new PointsComponent();
-    // this._loadMoreButtonComponent = new LoadMoreButtonComponent();
+    this._loadMoreButtonComponent = new LoadMoreButtonComponent();
     this._creatingPoint = null;
 
     this._onDataChange = this._onDataChange.bind(this);
-    // this._onSortTypeChange = this._onSortTypeChange.bind(this);
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
-    // this._onLoadMoreButtonClick = this._onLoadMoreButtonClick.bind(this);
+    this._onLoadMoreButtonClick = this._onLoadMoreButtonClick.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
 
-    // this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+    this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     this._pointsModel.setFilterChangeHandler(this._onFilterChange);
   }
 
@@ -82,12 +82,12 @@ export default class PageController {
     //   return;
     // }
 
-    // render(container, this._sortComponent, RenderPosition.BEFOREEND);
+    render(container, this._sortComponent, RenderPosition.BEFOREEND);
     // console.log(this._pointsComponent.getElement());
     render(container, this._pointsComponent, RenderPosition.BEFOREEND);
-    this._renderPoints(points); // .slice(0, this._showingPointsCount));
+    this._renderPoints(points.slice(0, this._showingPointsCount));
 
-    // this._renderLoadMoreButton();
+    this._renderLoadMoreButton();
   }
 
   _renderPoints(points) {
@@ -98,15 +98,15 @@ export default class PageController {
     // console.log(newPoint);
     // console.log(this._showedPointCount);
   }
-  // createTask() {
-  //   if (this._creatingTask) {
-  //     return;
-  //   }
-  //
-  //   const taskListElement = this._tasksComponent.getElement();
-  //   this._creatingTask = new TaskController(taskListElement, this._onDataChange, this._onViewChange);
-  //   this._creatingTask.render(EmptyTask, TaskControllerMode.ADDING);
-  // }
+  createTask() {
+    if (this._creatingPoint) {
+      return;
+    }
+
+    const pointListElement = this._pointsComponent.getElement();
+    this._creatingPoint = new PointController(pointListElement, this._onDataChange, this._onViewChange);
+    this._creatingPoint.render(EmptyPoint, PointControllerMode.ADDING);
+  }
 
   _removePoints() {
     this._showedPointControllers.forEach((pointController) => pointController.destroy());
@@ -114,27 +114,27 @@ export default class PageController {
   }
 
 
-  // _renderLoadMoreButton() {
-  //   remove(this._loadMoreButtonComponent);
-  //
-  //   if (this._showingTasksCount >= this._pointsModel.getTasks().length) {
-  //     return;
-  //   }
-  //
-  //   const container = this._container.getElement();
-  //   render(container, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
-  //   this._loadMoreButtonComponent.setClickHandler(this._onLoadMoreButtonClick);
-  // }
+  _renderLoadMoreButton() {
+    remove(this._loadMoreButtonComponent);
 
-  _updatePoints() {
+    if (this._showingPointsCount >= this._pointsModel.getPoints().length) {
+      return;
+    }
+
+    const container = this._container.getElement();
+    render(container, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
+    this._loadMoreButtonComponent.setClickHandler(this._onLoadMoreButtonClick);
+  }
+
+  _updatePoints(count) {
     this._removePoints();
-    this._renderPoints(this._pointsModel.getPoints()); // .slice(0, count));
-    // this._renderLoadMoreButton();
+    this._renderPoints(this._pointsModel.getPoints().slice(0, count));
+    this._renderLoadMoreButton();
   }
 
   _onDataChange(pointController, oldData, newData) {
     if (oldData === EmptyPoint) {
-      this._creatingTask = null;
+      this._creatingPoint = null;
       if (newData === null) {
         pointController.destroy();
         this._updatePints();
@@ -149,20 +149,20 @@ export default class PageController {
               destroyedPoint.destroy();
             }
 
-            this._showedTaskControllers = [].concat(pointController, this._showedTaskControllers);
-            this._showingTasksCount = this._showedTaskControllers.length;
+            this._showedPointControllers = [].concat(pointController, this._showedPointControllers);
+            this._showingPointsCount = this._showedPointControllers.length;
 
-            // this._renderLoadMoreButton();
+            this._renderLoadMoreButton();
           })
           .catch(() => {
             pointController.shake();
           });
       }
     } else if (newData === null) {
-      this._api.deleteTask(oldData.id)
+      this._api.deletePoint(oldData.id)
         .then(() => {
           this._pointsModel.removePoint(oldData.id);
-          this._updateTasks(this._showingPointsCount);
+          this._updatePoints(this._showingPointsCount);
         })
         .catch(() => {
           pointController.shake();
@@ -174,8 +174,8 @@ export default class PageController {
 
           if (isSuccess) {
             pointController.render(pointModel, PointControllerMode.DEFAULT);
-            this._updateTasks();
-            // this._updateTasks(this._showingPointCount);
+            this._updatePoints();
+            this._updatePoints(this._showingPointCount);
           }
         })
         .catch(() => {
@@ -188,30 +188,30 @@ export default class PageController {
     this._showedPointControllers.forEach((it) => it.setDefaultView());
   }
 
-  // _onSortTypeChange(sortType) {
-  //   this._showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
-  //
-  //   const sortedTasks = getSortedTasks(this._pointsModel.getTasks(), sortType, 0, this._showingTasksCount);
-  //
-  //   this._removeTasks();
-  //   this._renderTasks(sortedTasks);
-  //
-  //   this._renderLoadMoreButton();
-  // }
+  _onSortTypeChange(sortType) {
+    this._showingPointsCount = SHOWING_TASKS_COUNT_ON_START;
 
-  // _onLoadMoreButtonClick() {
-  //   const prevTasksCount = this._showingTasksCount;
-  //   const tasks = this._pointsModel.getTasks();
-  //
-  //   this._showingTasksCount = this._showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
-  //
-  //   const sortedTasks = getSortedTasks(tasks, this._sortComponent.getSortType(), prevTasksCount, this._showingTasksCount);
-  //   this._renderTasks(sortedTasks);
-  //
-  //   if (this._showingTasksCount >= sortedTasks.length) {
-  //     remove(this._loadMoreButtonComponent);
-  //   }
-  // }
+    const sortedPoints = getSortedPoints(this._pointsModel.getPoints(), sortType, 0, this._showingPointsCount);
+
+    this._removePoints();
+    this._renderPoints(sortedPoints);
+
+    this._renderLoadMoreButton();
+  }
+
+  _onLoadMoreButtonClick() {
+    const prevPointsCount = this._showingPointsCount;
+    const points = this._pointsModel.getPoints();
+
+    this._showingPointsCount = this._showingPointsCount + SHOWING_TASKS_COUNT_BY_BUTTON;
+
+    const sortedPoints = getSortedPoints(points, this._sortComponent.getSortType(), prevPointsCount, this._showingPointsCount);
+    this._renderPoints(sortedPoints);
+
+    if (this._showingPointsCount >= sortedPoints.length) {
+      remove(this._loadMoreButtonComponent);
+    }
+  }
 
   _onFilterChange() {
     this._updatePoints();
