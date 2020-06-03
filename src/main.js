@@ -1,14 +1,14 @@
-import {createSortTemplate} from "../src/components/createSortTemplate.js";
-import {createControlsTemplate} from "../src/components/controls.js";
-import {createTripinfoTemplate} from "../src/components/createTripinfoTemplate.js";
-import {createTripDay} from "../src/components/tripDay.js";
-import {createNewPoint} from "../src/components/create-new-point-without-destination.js";
+// import {createSortTemplate} from "../src/components/createSortTemplate.js";
+// import {createControlsTemplate} from "../src/components/controls.js";
+// import {createTripinfoTemplate} from "../src/components/createTripinfoTemplate.js";
+// import {createTripDay} from "../src/components/tripDay.js";
+// import {createNewPoint} from "../src/components/create-new-point-without-destination.js";
 import API from "../src/api/api.js";
 import FilterController from "./controllers/filter.js";
 import Provider from "../src/api/provider.js";
 import PointsModel from "../src/models/points.js";
 // import OffersModel from "../src/models/offers.js";
-import DestinationsModel from "../src/models/destinations.js";
+// import DestinationsModel from "../src/models/destinations.js";
 import PageController from "./controllers/page.js";
 import PageComponent from "./components/page.js";
 import Store from "../src/api/store.js";
@@ -78,17 +78,17 @@ siteMenuComponent.setOnChange((menuItem) => {
   }
 });
 
-const siteControlTabs = document.querySelector(`.trip-main__trip-controls.trip-controls`);
+// const siteControlTabs = document.querySelector(`.trip-main__trip-controls.trip-controls`);
 // renderOLD(siteMainElement, createTripinfoTemplate(), `afterbegin`);
 // renderOLD(siteControlTabs, createControlsTemplate(), `beforeend`);
 // renderOLD(siteTripEvents, createSortTemplate(), `beforeend`);
 // renderOLD(siteTripEvents, createTripDay(), `beforeend`);
 
 filterController.render();
-// renderOLD(siteHeaderElement, createFilterTemplate(filters), `beforeend`);
 // const siteEventsHeader = document.querySelector(`.trip-events`);
+// renderOLD(siteHeaderElement, createFilterTemplate(filters), `beforeend`);
 // console.log(pageComponent);
-render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
+// render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
 // render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
 // filterController.render();
 // render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
@@ -99,12 +99,7 @@ render(siteTripEvents, pageComponent, RenderPosition.BEFOREEND);
 
 apiWithProvider.getPoints()
   .then((points) => {
-    // debugger;
-    // console.log(points);
-    // console.log(pointsModel);
     pointsModel.setPoints(points);
-    // console.log(pointsModel);
-    // console.log(pageController);
     pageController.render();
   });
 
@@ -147,18 +142,18 @@ window.addEventListener(`offline`, () => {
   document.title += ` [offline]`;
 });
 
-const wrapSection = document.querySelector(`section.trip-events`);
-const addButton = document.querySelector(`.trip-main__event-add-btn`);
-
-addButton.addEventListener(`click`, () => {
-  const newPointTemp = createNewPoint();
-  addButton.setAttribute(`disabled`, ``);
-  render(wrapSection, newPointTemp, `afterbegin`);
-  wrapSection.querySelector(`.event__reset-btn`).addEventListener(`click`, () => {
-    addButton.removeAttribute(`disabled`, ``);
-    wrapSection.removeChild(wrapSection.children[0]);
-  });
-});
+// const wrapSection = document.querySelector(`section.trip-events`);
+// const addButton = document.querySelector(`.trip-main__event-add-btn`);
+//
+// addButton.addEventListener(`click`, () => {
+//   const newPointTemp = createNewPoint();
+//   addButton.setAttribute(`disabled`, ``);
+//   render(wrapSection, newPointTemp, `afterbegin`);
+//   wrapSection.querySelector(`.event__reset-btn`).addEventListener(`click`, () => {
+//     addButton.removeAttribute(`disabled`, ``);
+//     wrapSection.removeChild(wrapSection.children[0]);
+//   });
+// });
 
 // console.log(createEventsTemplate({name: `testName`, type: `testType`, destination: {name: `testDestinationName`, description: `testDestinationDescription`}}));
 // render(siteHeaderTripDay, response.getPoints(), `beforeend`);

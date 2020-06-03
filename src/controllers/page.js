@@ -12,7 +12,6 @@ const renderPoints = (pointListElement, points, onDataChange, onViewChange) => {
   return points.map((point) => {
     const pointController = new PointController(pointListElement, onDataChange, onViewChange);
     pointController.render(point, PointControllerMode.DEFAULT);
-    // console.log(pointController);
     return pointController;
   });
 };
@@ -85,20 +84,20 @@ export default class PageController {
     render(container, this._sortComponent, RenderPosition.BEFOREEND);
     // console.log(this._pointsComponent.getElement());
     render(container, this._pointsComponent, RenderPosition.BEFOREEND);
-    this._renderPoints(points.slice(0, this._showingPointsCount));
+    this._renderPoints(points); // .slice(0, this._showingPointsCount));
 
     this._renderLoadMoreButton();
   }
 
   _renderPoints(points) {
     const pointListElement = this._pointsComponent.getElement();
-    const newPoint = renderPoints(pointListElement, points, this._onDataChange, this._onViewChange);
-    this._showedPointControllers = this._showedPointControllers.concat(newPoint);
+    const newPoints = renderPoints(pointListElement, points, this._onDataChange, this._onViewChange);
+    this._showedPointControllers = this._showedPointControllers.concat(newPoints);
     this._showingPointCount = this._showedPointControllers.length;
     // console.log(newPoint);
     // console.log(this._showedPointCount);
   }
-  createTask() {
+  createPoint() {
     if (this._creatingPoint) {
       return;
     }

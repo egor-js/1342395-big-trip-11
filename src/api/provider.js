@@ -38,7 +38,6 @@ export default class Provider {
     }
 
     const storePoints = Object.values(this._store.getItems());
-
     return Promise.resolve(Point.parsePoints(storePoints));
   }
 

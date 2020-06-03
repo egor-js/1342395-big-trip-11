@@ -275,19 +275,19 @@ export default class PointEdit extends AbstractSmartComponent {
     this.rerender();
   }
 
-  setSubmitHandler(handler) {
-    this.getElement().querySelector(`form`)
-      .addEventListener(`submit`, handler);
+  // setSubmitHandler(handler) {
+  //   this.getElement().querySelector(`form`)
+  //     .addEventListener(`submit`, handler);
+  //
+  //   this._submitHandler = handler;
+  // }
 
-    this._submitHandler = handler;
-  }
-
-  setDeleteButtonClickHandler(handler) {
-    this.getElement().querySelector(`.card__delete`)
-      .addEventListener(`click`, handler);
-
-    this._deleteButtonClickHandler = handler;
-  }
+  // setDeleteButtonClickHandler(handler) {
+  //   this.getElement().querySelector(`.card__delete`)
+  //     .addEventListener(`click`, handler);
+  //
+  //   this._deleteButtonClickHandler = handler;
+  // }
 
   _applyFlatpickr() {
     if (this._flatpickr) {

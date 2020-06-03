@@ -17,10 +17,11 @@ export const EmptyPoint = {
   dateTo: null,
   dateFrom: null,
   destination: `EmptyDist`,
-  type: `EmptyType`,
+  type: ``,
   isFavorite: false,
   isArchive: false,
   basePrice: `Zero`,
+  offers: [],
 };
 
 const parseFormData = (formData) => {
@@ -31,7 +32,7 @@ const parseFormData = (formData) => {
   // }, {});
 
   return new PointModel({
-    "description": formData.get(`text`),
+    "description": formData.get(`text-ParseFormData`),
     // "due_date": date ? new Date(date) : null,
     // "repeating_days": formData.getAll(`repeat`).reduce((acc, it) => {
     // acc[it] = true;
@@ -60,20 +61,17 @@ export default class PointController {
     const oldPointComponent = this._pointComponent;
     const oldPointEditComponent = this._pointEditComponent;
     this._mode = mode;
-
     this._pointComponent = new PointComponent(point);
     this._pointEditComponent = new PointEditComponent(point);
-
-    // this._taskComponent.setEditButtonClickHandler(() => {
-    //   this._replaceTaskToEdit();
-    //   document.addEventListener(`keydown`, this._onEscKeyDown);
-    // });
-
-    // this._pointComponent.setArchiveButtonClickHandler(() => {
-    //   const newTask = PointModel.clone(task);
-    //   newTask.isArchive = !newTask.isArchive;
+    this._pointComponent.setEditButtonClickHandler(() => {
+      this._replacePointToEdit();
+      document.addEventListener(`keydown`, this._onEscKeyDown);
+    });
     //
-    //   this._onDataChange(this, task, newTask);
+    // this._pointComponent.setArchiveButtonClickHandler(() => {
+    //   const newPoint = PointModel.clone(point);
+    //   // newTask.isArchive = !newTask.isArchive;
+    //   this._onDataChange(this, point, newPoint);
     // });
 
     // this._pointComponent.setFavoritesButtonClickHandler(() => {
@@ -81,7 +79,7 @@ export default class PointController {
     //   newPoint.isFavorite = !newPoint.isFavorite;
     //   this._onDataChange(this, point, newPoint);
     // });
-
+    //
     // this._pointEditComponent.setSubmitHandler((evt) => {
     //   evt.preventDefault();
     //
@@ -94,11 +92,11 @@ export default class PointController {
     //
     //   this._onDataChange(this, point, data);
     // });
+
     // this._pointEditComponent.setDeleteButtonClickHandler(() => {
     //   this._pointEditComponent.setData({
     //     deleteButtonText: `Deleting...`,
     //   });
-    //
     //   this._onDataChange(this, point, null);
     // });
 
