@@ -53,6 +53,7 @@ const statisticsComponent = new StatisticsComponent({points: pointsModel, dateFr
 
 const pageComponent = new PageComponent();
 const pageController = new PageController(pageComponent, pointsModel, apiWithProvider);
+console.log(pageController);
 
 render(siteControlsElement, siteMenuComponent, RenderPosition.BEFOREEND);
 filterController.render();
@@ -108,15 +109,15 @@ apiWithProvider.getPoints()
 // render(siteHeaderTripDay, forRender, `beforeend`);
 // });
 
-window.addEventListener(`load`, () => {
-  navigator.serviceWorker.register(`/sw.js`)
-        .then(() => {
-          // Действие, в случае успешной регистрации ServiceWorker
-        }).catch(() => {
-          // Действие, в случае ошибки при регистрации ServiceWorker
-        });
-});
-//
+// window.addEventListener(`load`, () => {
+//   navigator.serviceWorker.register(`/sw.js`)
+//         .then(() => {
+//           // Действие, в случае успешной регистрации ServiceWorker
+//         }).catch(() => {
+//           // Действие, в случае ошибки при регистрации ServiceWorker
+//         });
+// });
+// //
 window.addEventListener(`online`, () => {
   document.title = document.title.replace(` [offline]`, ``);
   apiWithProvider.sync();

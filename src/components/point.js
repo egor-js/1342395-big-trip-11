@@ -63,9 +63,13 @@ export default class Point extends AbstractComponent {
 
   setEditButtonClickHandler(handler) {
     this.getElement().querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, handler);
+    .addEventListener(`click`, handler);
   }
 
+  // setEditButtonClickHandler(handler) {
+  //   this.getElement().querySelector(`.event__rollup-btn`)
+  //   .addEventListener(`click`, handler);
+  // }
   // setFavoritesButtonClickHandler(handler) {
   //   this.getElement().querySelector(`.event__favorite-btn`)
   //     .addEventListener(`click`, handler);

@@ -1,5 +1,12 @@
 import moment from "moment";
 
+export const dateBefore = (dateNow, dateFrom) => {
+  // console.log(moment.utc(dateNow).format(`YYYY-MM-DDTHH:mm:ss.SSSSZ`));
+  // console.log(moment.utc(dateFrom).format(`YYYY-MM-DDTHH:mm:ss.SSSSZ`));
+  // console.log(moment(dateFrom).isBefore(dateNow));
+  return moment(dateNow).isBefore(dateFrom);
+};
+
 export const formatTime = (date) => {
   return moment.utc(date).format(`HH:MM`);
 };

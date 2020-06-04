@@ -4,6 +4,7 @@ import SortComponent, {SortType} from "../components/sort.js";
 import PointController, {Mode as PointControllerMode, EmptyPoint} from "../controllers/point.js";
 import PointsComponent from "../components/points.js";
 import {render, remove, RenderPosition} from "../utils/render.js";
+import {formatDate} from "../utils/common.js";
 
 const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
@@ -21,10 +22,10 @@ const getSortedPoints = (points, sortType, from, to) => {
   const showingPoints = points.slice();
 
   switch (sortType) {
-    case SortType.DATE_UP:
+    case SortType.PAST:
       sortedPoints = showingPoints.sort((a, b) => a.dateFrom - b.dateFrom);
       break;
-    case SortType.DATE_DOWN:
+    case SortType.FUTURE:
       sortedPoints = showingPoints.sort((a, b) => b.dateFrom - a.dateFrom);
       break;
     case SortType.DEFAULT:

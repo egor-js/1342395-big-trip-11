@@ -66,6 +66,8 @@ export default class PointController {
     this._pointComponent.setEditButtonClickHandler(() => {
       this._replacePointToEdit();
       document.addEventListener(`keydown`, this._onEscKeyDown);
+      document.querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onEscKeyDown);
+
     });
     //
     // this._pointComponent.setArchiveButtonClickHandler(() => {
@@ -92,7 +94,8 @@ export default class PointController {
     //
     //   this._onDataChange(this, point, data);
     // });
-
+    // console.log(this);
+    // console.log(this._pointEditComponent);
     // this._pointEditComponent.setDeleteButtonClickHandler(() => {
     //   this._pointEditComponent.setData({
     //     deleteButtonText: `Deleting...`,

@@ -275,12 +275,12 @@ export default class PointEdit extends AbstractSmartComponent {
     this.rerender();
   }
 
-  // setSubmitHandler(handler) {
-  //   this.getElement().querySelector(`form`)
-  //     .addEventListener(`submit`, handler);
-  //
-  //   this._submitHandler = handler;
-  // }
+  setSubmitHandler(handler) {
+    this.getElement().querySelector(`form`)
+      .addEventListener(`submit`, handler);
+
+    this._submitHandler = handler;
+  }
 
   // setDeleteButtonClickHandler(handler) {
   //   this.getElement().querySelector(`.card__delete`)
@@ -318,12 +318,12 @@ export default class PointEdit extends AbstractSmartComponent {
         // saveButton.disabled = !isAllowableDescriptionLength(this._currentDestination);
       });
 
-    // element.querySelector(`.card__date-deadline-toggle`)
-    //   .addEventListener(`click`, () => {
-    //     this._isDateShowing = !this._isDateShowing;
-    //
-    //     this.rerender();
-    //   });
+    element.querySelector(`.event__reset-btn`)
+      .addEventListener(`click`, () => {
+        console.log(`point-edit subscribeOnEvents() element.querySelector(.event__reset-btn)`);
+        // this._isDateShowing = !this._isDateShowing;
+        this.rerender();
+      });
 
     // element.querySelector(`.card__repeat-toggle`)
     //   .addEventListener(`click`, () => {

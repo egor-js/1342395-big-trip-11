@@ -1,11 +1,11 @@
 import {getPointsByFilter} from "../utils/filter.js";
-// import {FilterType} from "../const.js";
+import {FilterType} from "../const.js";
 
 
 export default class Points {
   constructor() {
     this._points = [];
-    this._activeFilterType = `everything`; // FilterType.ALL;
+    this._activeFilterType = FilterType.ALL;
 
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
